@@ -30,7 +30,7 @@ def max_pool_2x2(x):
 # correct labels
 y_ = tf.placeholder(tf.float32, [None, 10])
 
-# reshape the iput data to image dimensions
+# reshape the input data to image dimensions
 x = tf.placeholder(tf.float32, [None, 784])
 x_image = tf.reshape(x, [-1, 28, 28, 1])
 
