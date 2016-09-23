@@ -61,12 +61,24 @@ train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
+# create a saver
+saver = tf.train.Saver()
+
 # initialize the graph
 init = tf.initialize_all_variables()
 sess = tf.Session()
 sess.run(init)
 
 # train
+saver.save(sess, 'mnist_conv_initial')
+print("Startin Burn-In...")
+for i in range(500):
+    input_images, correct_predictions = mnist.train.next_batch(50)
+    if i % 100 == 0:
+        train_accuracy = sess.run(accuracy, feed_dict={x: input_images, y_: correct_predictions, keep_prob: 1.0})
+        print("step %d, training accuracy %g" % (i, train_accuracy))
+    sess.run(train_step, feed_dict={x: input_images, y_: correct_predictions, keep_prob: 0.5})
+saver.restore(sess, 'mnist_conv_initial')
 print("Starting the training...")
 start_time = time()
 for i in range(20000):
