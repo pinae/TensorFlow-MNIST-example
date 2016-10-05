@@ -63,11 +63,12 @@ sess = tf.Session()
 sess.run(init)
 
 # train
+batch_size = 100
 print("Startin Burn-In...")
 saver.save(sess, 'mnist_fc_best')
-for i in range(500):
-    input_images, correct_predictions = mnist.train.next_batch(100)
-    if i % 50 == 0:
+for i in range(700):
+    input_images, correct_predictions = mnist.train.next_batch(batch_size)
+    if i % (60000/batch_size) == 0:
         train_accuracy = sess.run(accuracy, feed_dict={
             x: input_images, y_: correct_predictions, keep_prob_input: 1.0, keep_prob: 1.0})
         print("step %d, training accuracy %g" % (i, train_accuracy))
@@ -80,9 +81,9 @@ saver.restore(sess, 'mnist_fc_best')
 print("Starting the training...")
 start_time = time()
 best_accuracy = 0.0
-for i in range(20000):
-    input_images, correct_predictions = mnist.train.next_batch(100)
-    if i % 50 == 0:
+for i in range(20*60000):
+    input_images, correct_predictions = mnist.train.next_batch(batch_size)
+    if i % (60000/batch_size) == 0:
         train_accuracy = sess.run(accuracy, feed_dict={
             x: input_images, y_: correct_predictions, keep_prob_input: 1.0, keep_prob: 1.0})
         print("step %d, training accuracy %g" % (i, train_accuracy))
