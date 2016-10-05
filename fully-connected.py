@@ -81,7 +81,7 @@ saver.restore(sess, 'mnist_fc_best')
 print("Starting the training...")
 start_time = time()
 best_accuracy = 0.0
-for i in range(20*60000):
+for i in range(20*60000/batch_size):
     input_images, correct_predictions = mnist.train.next_batch(batch_size)
     if i % (60000/batch_size) == 0:
         train_accuracy = sess.run(accuracy, feed_dict={
